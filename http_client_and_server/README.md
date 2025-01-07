@@ -1,5 +1,5 @@
 # Project: HTTP client and server
-A simple http client and server.
+A simple http client and server, written using Python v3.12.3
 
 Restrictions - the following helper functions are forbidden:
 - The `socket.create_connection()` function.
