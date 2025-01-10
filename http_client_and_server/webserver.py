@@ -1,6 +1,9 @@
+import logging
 import socket
 import sys
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 def process_arguments() -> int:
     """Returns the commandline arguments for port (optional)"""
@@ -20,8 +23,8 @@ def main():
     s.bind(('', port))
     s.listen()
     while True:
-        new_conn = s.accept()
-        new_socket = new_conn[0]
+        new_socket, new_addr = s.accept()
+        logger.info(f"Connection from address: {new_addr}")  # Extension 1
         msg = ""
         while True:
             d = new_socket.recv(4096)
