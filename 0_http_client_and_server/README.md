@@ -1,12 +1,16 @@
 # Project 0: HTTP client and server
-A simple http client and server, written using Python v3.12.3 on Ubuntu 24.04
+A simple http client and server, written using Python v3.12.3 on Ubuntu 24.04.
 
-Restrictions - the following helper functions are forbidden:
+### Requirements (completed)
+- Create a web client that runs from the command line and makes simple http GET requests.
+- Create a web server that runs from the command line and implements GET requests.
+
+### Restrictions - the following helper functions are forbidden:
 - The `socket.create_connection()` function.
 - The `socket.create_server()` function.
 - Anything in the `urllib` modules.
 
-Extensions:
+### Extensions (completed):
 
 1. Modify the server to print out the IP address and port of the client that just connected to it.
 2. Modify the client to be able to send payloads.
@@ -14,11 +18,12 @@ Extensions:
 4. Modify the server to extract and print a payload sent by the client.
 
 # Web client usage
-The client can be accessed via the command line using the format: `$ python3 webclient.py address port`.</br>
-Address and port are optional, and will default to "example.com" and 80.</br>
+The client can be accessed via the command line using the format: `$ python3 webclient.py address port payload`.</br>
+Address, port and payload are optional, and will default to "example.com", 80.</br>
 `$ python3 webclient.py example.com`</br>
-`$ python3 webclient.py example.com 80` </br>
-will return an output like this (truncated):
+`$ python3 webclient.py example.com 80`</br>
+`$ python3 webclient.py example.com 80 "This is a text payload"`</br>
+The first command will return an output like this (truncated):
 ```
 HTTP/1.1 200 OK
 Accept-Ranges: bytes
@@ -48,7 +53,10 @@ Port is optional and will default to 28333.</br>
 `$ python3 webserver.py` </br>
 `$ python3 webserver.py 20888`
 
-The web server will return a simple HTTP response:
+The web server has implemented `GET`, `HEAD`, `POST`, everything else will return a `501 Not implemented`.</br>
+`POST` will only accept a plain text payload, which will be echoed back in the response.</br>
+Below is an example response:
+
 ```
 HTTP/1.1 200 OK
 Content-Type: text/plain
