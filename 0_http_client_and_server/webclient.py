@@ -46,13 +46,12 @@ class WebClient:
         """Makes a post request with a simple text payload, encoding set to web default"""
         s = socket.socket()
         s.connect((address, port))
-        post_request = f"""POST / HTTP1.1\r\n
-        Host: {address}:{port}\r\n
-        Content-Type: text/html\r\n
-        Content-Length: {len(payload)}\r\n
-        \r\n
-        {payload}\r\n
-        \r\n"""
+        post_request = "POST / HTTP1.1\r\n" \
+        f"Host: {address}:{port}\r\n" \
+        "Content-Type: text/html\r\n" \
+        f"Content-Length: {len(payload)}\r\n" \
+        "\r\n" \
+        f"{payload}\r\n\r\n"
         b = post_request.encode(encoding)
         s.sendall(b)
         res =  ""
@@ -66,6 +65,7 @@ class WebClient:
 
 def main():
     arguments = process_arguments(sys.argv)
+    # arguments = {"address": "localhost", "port": 28333, "payload": "This is some random text."}  #TODO: remove this line
     web_client = WebClient()
     client_response = web_client.web_request(arguments)
     logger.info(client_response)
