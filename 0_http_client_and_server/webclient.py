@@ -65,7 +65,6 @@ class WebClient:
 
 def main():
     arguments = process_arguments(sys.argv)
-    # arguments = {"address": "localhost", "port": 28333, "payload": "This is some random text."}  #TODO: remove this line
     web_client = WebClient()
     client_response = web_client.web_request(arguments)
     logger.info(client_response)
