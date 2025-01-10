@@ -1,10 +1,17 @@
-# Project: HTTP client and server
-A simple http client and server, written using Python v3.12.3
+# Project 0: HTTP client and server
+A simple http client and server, written using Python v3.12.3 on Ubuntu 24.04
 
 Restrictions - the following helper functions are forbidden:
 - The `socket.create_connection()` function.
 - The `socket.create_server()` function.
 - Anything in the `urllib` modules.
+
+Extensions:
+
+1. Modify the server to print out the IP address and port of the client that just connected to it.
+2. Modify the client to be able to send payloads.
+3. Modify the server to extract and print out the "request method" from the request.
+4. Modify the server to extract and print a payload sent by the client.
 
 # Web client usage
 The client can be accessed via the command line using the format: `$ python3 webclient.py address port`.</br>
