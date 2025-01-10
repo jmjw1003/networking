@@ -2,8 +2,8 @@
 A simple http client and server, written using Python v3.12.3 on Ubuntu 24.04.
 
 ### Requirements (completed)
-- Create a web client that runs from the command line and makes simple http GET requests.
-- Create a web server that runs from the command line and implements GET requests.
+- Create a web client that runs from the command line and makes simple http `GET` requests.
+- Create a web server that runs from the command line and implements `GET` requests.
 
 ### Restrictions - the following helper functions are forbidden:
 - The `socket.create_connection()` function.
