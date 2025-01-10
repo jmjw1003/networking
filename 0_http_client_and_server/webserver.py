@@ -25,11 +25,16 @@ class WebServer:
         self.get_response = self._get_response(encoding)
 
     def _get_response(self, encoding):
+        """For some reason using @cached_property decorator didn't work with this function, so just pre computing in __init__"""
         server_response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 6\r\nConnection: close\r\n\r\nHello!\r\n"
         byte_response = server_response.encode(encoding)
         return byte_response
 
-    def listen(self, encoding: str = "ISO-8859-1"):
+    def listen(self, encoding: str = "ISO-8859-1") -> None:
+        """
+        Sets the server to listen for incoming connections, fetches a new socket from the OS,
+        receives message stream and then sends a response before closing the connection
+        """
         self.s.listen()
         while True:
             new_socket, new_addr = self.s.accept()
