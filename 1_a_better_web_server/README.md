@@ -1,5 +1,11 @@
 # Project 1: A better web server
-### Requirements
+### Usage
+The web server can started via the command line using the format: `$ python3 webserver.py port`.</br>
+Port is optional and will default to 28333.</br>
+`$ python3 webserver.py` </br>
+`$ python3 webserver.py 20888`
+
+### Requirements (completed)
 Time to improve the web server so that it serves actual files!
 
 We’re going to make it so that when a web client (in this case we’ll use a browser) requests a specific file, the webserver will return that file.
