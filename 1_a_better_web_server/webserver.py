@@ -33,6 +33,9 @@ def process_arguments(system_arguments: sys.argv) -> int:
 class WebServer:
     def __init__(self, port: int, encoding: str = "ISO-8859-1") -> None:
         self.encoding = encoding
+        self.debug = False
+        self.files_path = Path("./files/") if not self.debug else Path("./1_a_better_web_server/files/")
+
         # Port initialization
         self.port = port
         self.s = socket.socket()
@@ -40,17 +43,15 @@ class WebServer:
         self.s.bind(('', port))
         
         # Server files
-        self.server_files = os.listdir(Path("./files/"))  # Note this will not work if running the server from the root directory.
+        self.server_files = os.listdir(self.files_path)
 
         # Pre-computed responses
         self.not_implemented = self._not_implemented_response()
         self.not_found = self._not_found_response()
         self.get = self._get_response()
 
-        # File type -> content type
-
     def _read_file(self, file_name: str) -> str:
-        with open(f"./files/{file_name}", "r") as f:
+        with open(f"{self.files_path}/{file_name}", "rb") as f:
             data = f.read()
         return data
 
@@ -61,11 +62,13 @@ class WebServer:
         if not file_name:
             dir_options = f"Available files: {", ".join(self.server_files)}"
             server_response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset={self.encoding.lower()}\r\nContent-Length: {len(dir_options)}\r\nConnection: close\r\n\r\n{dir_options}\r\n"
+            return self._encode_msg(server_response)
         else:
-            content_type = mimetypes.guess_type(file_name.split(".")[-1])
+            content_type = mimetypes.guess_type(file_name)[0]
             content = self._read_file(file_name)
-            server_response = f"HTTP/1.1 200 OK\r\nContent-Type: {content_type}; charset={self.encoding.lower()}\r\nContent-Length: {len(content)}\r\nConnection: close\r\n\r\n{content}\r\n"
-        return self._encode_msg(server_response)
+            server_response_pre = f"HTTP/1.1 200 OK\r\nContent-Type: {content_type}; charset={self.encoding.lower()}\r\nContent-Length: {len(content)}\r\nConnection: close\r\n\r\n"
+            server_response = self._encode_msg(server_response_pre) + content + b"\r\n"
+            return server_response
     
     def _not_implemented_response(self) -> bytes:
         server_response = "HTTP/1.1 501 Not Implemented\r\n"
