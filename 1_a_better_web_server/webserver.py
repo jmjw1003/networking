@@ -1,4 +1,5 @@
 import logging
+import mimetypes
 import os
 import socket
 import sys
@@ -46,6 +47,8 @@ class WebServer:
         self.not_found = self._not_found_response()
         self.get = self._get_response()
 
+        # File type -> content type
+
     def _read_file(self, file_name: str) -> str:
         with open(f"./files/{file_name}", "r") as f:
             data = f.read()
@@ -57,11 +60,11 @@ class WebServer:
     def _get_response(self, file_name: str | None = None) -> bytes:
         if not file_name:
             dir_options = f"Available files: {", ".join(self.server_files)}"
-            server_response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(dir_options)}\r\nConnection: close\r\n\r\n{dir_options}\r\n"
+            server_response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset={self.encoding.lower()}\r\nContent-Length: {len(dir_options)}\r\nConnection: close\r\n\r\n{dir_options}\r\n"
         else:
-            content_type = file_name.split(".")[-1]
+            content_type = mimetypes.guess_type(file_name.split(".")[-1])
             content = self._read_file(file_name)
-            server_response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(content)}\r\nConnection: close\r\n\r\n{content}\r\n"
+            server_response = f"HTTP/1.1 200 OK\r\nContent-Type: {content_type}; charset={self.encoding.lower()}\r\nContent-Length: {len(content)}\r\nConnection: close\r\n\r\n{content}\r\n"
         return self._encode_msg(server_response)
     
     def _not_implemented_response(self) -> bytes:
@@ -99,7 +102,7 @@ class WebServer:
             while True:
                 d = new_socket.recv(4096)
                 chunk = d.decode(self.encoding)
-                if chunk[-4:] == "\r\n\r\n":
+                if chunk.endswith("\r\n\r\n"):
                     msg += chunk
                     break
                 msg += chunk
