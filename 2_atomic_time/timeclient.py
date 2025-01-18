@@ -20,7 +20,7 @@ class TimeClient:
         """
         Time server returns seconds since 1900.
         It seems despite the cost of running the TCP socket they're begrudgingly
-        maintaining it for 
+        maintaining it for the forseeable future, but it sometimes returns 0
         """
         s = socket.socket()
         s.connect((self.addr, self.port))
@@ -38,7 +38,7 @@ class TimeClient:
     def print_times(self) -> None:
         atomic_time = self.get_atomic_time()
         system_time = self.get_system_time()
-        logger.info(f"NIST time  : {atomic_time}")
+        logger.info(f"NIST time  : {atomic_time}") if atomic_time else logger.error("NIST time not return by host, please retry.")
         logger.info(f"System time: {system_time}")
         time.sleep(4)  # Hardcoding a rate limiter so you don't get blocked by the host
 
