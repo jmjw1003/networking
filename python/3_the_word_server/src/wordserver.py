@@ -63,12 +63,13 @@ def send_words(s):
 
 def main(argv):
 
-    try:
-        port = int(argv[1])
-    except:
-        usage()
-        return 1
+    # try:
+    #     port = int(argv[1])
+    # except:
+    #     usage()
+    #     return 1
 
+    port = 28333
     s = socket.socket()
     s.bind(('', port))
     s.listen()
