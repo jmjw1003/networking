@@ -3,6 +3,7 @@ import socket
 
 # How many bytes is the word length?
 WORD_LEN_SIZE = 2
+BUFFER_SIZE = 5
 
 def usage():
     print("usage: wordclient.py server port", file=sys.stderr)
@@ -29,7 +30,7 @@ def get_next_word_packet(s):
                 packet_buffer = packet_buffer[WORD_LEN_SIZE+next_word_size:]
                 return next_word_packet
 
-        d = s.recv(5)
+        d = s.recv(BUFFER_SIZE)
         if len(d) == 0:
             break
         packet_buffer += d
