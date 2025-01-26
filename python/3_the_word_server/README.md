@@ -1,4 +1,6 @@
 # Project: The word server
+Completed and tests added (requires `pytest`).
+
 https://beej.us/guide/bgnet0/html/split/project-the-word-server.html
 
 This is a project that is all about reading packets.
