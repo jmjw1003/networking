@@ -76,7 +76,6 @@ class TCPValidator:
         
         If a segment contains an odd number of header and text octets to be checksummed, the last octet is padded on
         the right with zeros to form a 16 bit word for checksum purposes.
-
         """
         tcp_zero_cksum = tcp_data[:16] + b'\x00\x00' + tcp_data[18:]
         if len(tcp_zero_cksum) % 2 == 1:
@@ -86,7 +85,7 @@ class TCPValidator:
     def calculate_tcp_checksum(self, validation_data: bytes) -> int:
         """Given a TCP payload with 0 checksum, calculates the checksum.
         
-        The checksum field is the 16 bit one's complement of the#
+        The checksum field is the 16 bit one's complement of the
         one's complement sum of all 16 bit words in the header and text.
         """
         offset = 0  # Byte offset into data
@@ -99,10 +98,10 @@ class TCPValidator:
             # Carry around
             calculated_tcp_checksum = (calculated_tcp_checksum & 0xffff) + (calculated_tcp_checksum >> 16)
 
-            # Go to the next 2-byte value
+            # Increment offset
             offset += 2
 
-        # one's complement
+        # One's complement
         return (~calculated_tcp_checksum) & 0xffff
 
     def validate_tcp_checksum(self, source: bytes, destination: bytes, tcp_data: bytes) -> bool:
@@ -124,12 +123,13 @@ def main():
     tcp_utils = TCPFileUtils()
     tcp_validator = TCPValidator()
     
-    addr_file = "./python/4_tcp_packet_validation/src/tcp_data/tcp_addrs_1.txt"
-    tcp_file = "./python/4_tcp_packet_validation/src/tcp_data/tcp_data_1.dat"
-    source, destination = tcp_utils.read_tcp_addr_file(addr_file)
-    tcp_data = tcp_utils.read_tcp_data_file(tcp_file)
-
-    print(tcp_validator.validate_tcp_checksum(source, destination, tcp_data))
+    for i in range(10):
+        addr_file = f"./python/4_tcp_packet_validation/src/tcp_data/tcp_addrs_{i}.txt"
+        tcp_file = f"./python/4_tcp_packet_validation/src/tcp_data/tcp_data_{i}.dat"
+        source, destination = tcp_utils.read_tcp_addr_file(addr_file)
+        tcp_data = tcp_utils.read_tcp_data_file(tcp_file)
+        tcp_data_valid = tcp_validator.validate_tcp_checksum(source, destination, tcp_data)
+        print("PASS") if tcp_data_valid else print("FAIL")
     
 
 if __name__ == "__main__":
