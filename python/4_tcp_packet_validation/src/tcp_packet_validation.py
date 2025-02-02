@@ -60,8 +60,8 @@ class TCPFileUtils:
 class TCPValidator:
     def __init__(self) -> None:
         # IP header constants
-        self.TCP_PROTOCOL = b'0x06'
-        self.ZERO = b'0x00'
+        self.TCP_PROTOCOL = int(6).to_bytes(1)
+        self.ZERO = int(0).to_bytes(1)
 
     def build_psuedoheader(self, source: bytes, destination: bytes, tcp_data: bytes):
         """Builds an IP header for given source, destination and tcp data."""
